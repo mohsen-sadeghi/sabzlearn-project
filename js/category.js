@@ -1,9 +1,10 @@
-import { getAndShowCategoryCourses , inertCourseBoxHtmlTemplate} from "./funcs/shared.js"
+import { getAndShowCategoryCourses , inertCourseBoxHtmlTemplate , coursesSorting} from "./funcs/shared.js"
 window.addEventListener('load' , ()=>{
     getAndShowCategoryCourses().then(categoryCourses => {
         let containerCategory = document.querySelector('.container-category-courses')
         const coursesShowTypeIcons = document.querySelectorAll('.courses-top-bar__icon-parent') 
         const coursesFilteringSelection = document.querySelectorAll('.courses-top-bar__selection-item')
+        const selectionTitleElement = document.querySelector('.courses-top-bar__selection-title')
         let courses = [...categoryCourses]
         
         let coursesShowType = 'row'
@@ -37,8 +38,15 @@ window.addEventListener('load' , ()=>{
         // show category courses by user Filtering methods
         coursesFilteringSelection.forEach( coursesFiltering =>{
           coursesFiltering.addEventListener('click' , event => {
-            coursesFilteringSelection.forEach(courses > courses.classList.remove('courses-top-bar__selection-item--active'))
+            coursesFilteringSelection.forEach(courses => courses.classList.remove('courses-top-bar__selection-item--active'))
             event.target.classList.add('courses-top-bar__selection-item--active')
+            selectionTitleElement.innerHTML = `
+            ${event.target.innerHTML}
+            <i class="fas fa-angle-down courses-top-bar__selection-icon"></i>
+            `
+            let userFilteringSelection = event.target.dataset.key
+            let showCourses = coursesSorting(courses , userFilteringSelection , containerCategory)
+            inertCourseBoxHtmlTemplate(showCourses , coursesShowType , containerCategory)
           })
         })
     })

@@ -294,6 +294,7 @@ const getAndShowCategoryCourses = async ()=>{
 }
 
 const inertCourseBoxHtmlTemplate = (courses , showType , parentElement) =>{
+  parentElement.innerHTML = ''
   if(showType === 'row'){
     courses.forEach(courses => {
       parentElement.insertAdjacentHTML("beforeend" , `
@@ -389,4 +390,30 @@ const inertCourseBoxHtmlTemplate = (courses , showType , parentElement) =>{
   }
 }
 
-export {showUserNameInNavbar,renderTopBarMenus,getAndShowAllCourses,getAndShowAllPopularCourses,getAndShowPresellCourses,getAndShowArticles,getAndShowMenus,getAndShowCategoryCourses , inertCourseBoxHtmlTemplate};
+const coursesSorting = (array , filterMethod , container)=>{
+  let outputArray = []
+
+  switch(filterMethod){
+      case "free" : {
+        outputArray = array.filter(course => course.price === 0) 
+        break
+      }
+      case "money" : {
+        outputArray = array.filter(course => course.price !== 0) 
+        break
+      }
+
+      case "first" : {
+        outputArray = [...array].reverse() 
+        break
+      }
+
+      default : {
+        outputArray = array
+      }
+    }
+
+  return outputArray
+}
+
+export {showUserNameInNavbar,renderTopBarMenus,getAndShowAllCourses,getAndShowAllPopularCourses,getAndShowPresellCourses,getAndShowArticles,getAndShowMenus,getAndShowCategoryCourses , inertCourseBoxHtmlTemplate , coursesSorting};
