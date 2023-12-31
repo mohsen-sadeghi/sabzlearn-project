@@ -1,10 +1,12 @@
 import { getAndShowCategoryCourses , inertCourseBoxHtmlTemplate , coursesSorting} from "./funcs/shared.js"
+import { searchInArray } from "./funcs/utils.js"
 window.addEventListener('load' , ()=>{
     getAndShowCategoryCourses().then(categoryCourses => {
         let containerCategory = document.querySelector('.container-category-courses')
         const coursesShowTypeIcons = document.querySelectorAll('.courses-top-bar__icon-parent') 
         const coursesFilteringSelection = document.querySelectorAll('.courses-top-bar__selection-item')
         const selectionTitleElement = document.querySelector('.courses-top-bar__selection-title')
+        const coursesSearchBoxInput = document.querySelector('.courses-top-bar__input')
         let courses = [...categoryCourses]
         
         let coursesShowType = 'row'
@@ -48,6 +50,16 @@ window.addEventListener('load' , ()=>{
             let showCourses = coursesSorting(courses , userFilteringSelection , containerCategory)
             inertCourseBoxHtmlTemplate(showCourses , coursesShowType , containerCategory)
           })
+        })
+        // Handel course Search
+        coursesSearchBoxInput.addEventListener('input' , async (event) =>{
+          const shownCourses = searchInArray([...categoryCourses] , 'name' , event.target.value)
+          if(shownCourses.length){
+            inertCourseBoxHtmlTemplate(shownCourses , coursesShowType , containerCategory)
+          }else{
+            containerCategory.innerHTML = ''
+            containerCategory.insertAdjacentHTML('beforeend' , `<div class="alert alert-danger"> هیچ دوره ای برای جست و جو شما وجود ندارد :( </div>`)
+          }
         })
     })
 })
