@@ -12,8 +12,7 @@ const showUserNameInNavbar = () => {
     });
   } else {
     navbarProfileBox.href = "login.html";
-    navbarProfileBox.innerHTML =
-      '<span class="main-header__profile-text">ثبت نام  ورود</span>';
+    navbarProfileBox.innerHTML = '<span class="main-header__profile-text">ثبت نام | ورود</span>';
   }
 };
 
@@ -260,9 +259,10 @@ const getAndShowArticles = async () => {
 };
 
 const getAndShowMenus = async () => {
-  const menusWrapper = document.querySelector("#menus-wrapper");
+  const menusWrapper = document.querySelector(".main-header__menu");
   const res = await fetch(`http://localhost:4000/v1/menus`);
   const dataMenus = await res.json();
+  menusWrapper.innerHTML = '';
   [...dataMenus].map((menu) => {
     menusWrapper.insertAdjacentHTML(
      "beforeend",`

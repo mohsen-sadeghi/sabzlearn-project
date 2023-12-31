@@ -84,7 +84,7 @@ const getMe = async () => {
       Authorization: `Bearer ${token}`
     }
   })
-  const data = res.json()
+  const data = await res.json()
   return data
 }
 
