@@ -494,11 +494,19 @@ const getCourseDetails = async () => {
   const courseLastUpdateElem = $.querySelector(
     ".course-boxes__box-left--lastUpdate"
   );
+  const courseCommentCountElem = $.querySelector(
+    ".course-info__total-comment-text"
+  );
+  const courseStudentsCountElem = $.querySelector(
+    ".course-info__total-sale-number"
+  );
+
   const courseTimeElem = $.querySelector(".course-boxes__box-left--time");
   let totalMinutes = 0;
   let totalSeconds = 0;
   let totalHours = 0;
 
+  // Get course details from Backend
   const courseShortName = getUrlParam("name");
   fetch(`http://localhost:4000/v1/courses/${courseShortName}`, {
     headers: {
@@ -507,6 +515,7 @@ const getCourseDetails = async () => {
   })
     .then((res) => res.json())
     .then((course) => {
+      console.log(course);
       courseInfoTitleElem.innerHTML = course.name;
       courseDescElem.innerHTML = course.description;
       courseCategoryElem.innerHTML = course.categoryID.title;
@@ -523,21 +532,122 @@ const getCourseDetails = async () => {
       courseSupportElem.innerHTML = course.support;
       courseLastUpdateElem.innerHTML = course.updatedAt.slice(0, 10);
 
-      course.sessions.forEach((item) => {
-        totalMinutes += Number(item.time.slice(0, 2));
-        totalSeconds += Number(item.time.slice(3));
-        if (totalSeconds >= 60) {
-          totalSeconds -= 60;
-          ++totalMinutes;
-        } else if (totalMinutes >= 60) {
-          totalMinutes -= 60;
-          ++totalHours;
-        }
-        return `${totalHours}:${totalMinutes}:${totalSeconds}`;
-      });
-      courseTimeElem.innerHTML = `${totalHours}:${totalMinutes}:${totalSeconds}`
+      // show course session and show time courses
+      let sessionWrapper = $.querySelector(".session-wrapper");
+
+      if (course.sessions.length) {
+        course.sessions.forEach((session, index) => {
+          // add session
+          sessionWrapper.insertAdjacentHTML(
+            "beforeend",
+            `
+          <div id="collapseOne" class="accordion-collapse collapse show session-wrapper" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body introduction__accordion-body">
+            <div class="introduction__accordion-right">
+              <span class="introduction__accordion-count">${++index}</span>
+              <i class="fab fa-youtube introduction__accordion-icon"></i>
+              ${
+                session.free || course.isUserRegisteredToThisCourse
+                  ? `              <a href="#" class="introduction__accordion-link">
+                  ${session.title}
+                  </a>`
+                  : `
+                  <span class="introduction__accordion-link">
+                  ${session.title}
+                  </span>
+                  `
+              }
+
+            </div>
+            <div class="introduction__accordion-left">
+              <span class="introduction__accordion-time">
+                ${session.time}
+              </span>
+              ${
+                course.isUserRegisteredToThisCourse || session.free
+                  ? '<i class="fa fa-unlock"></i>'
+                  : '<i class="fa fa-lock"></i>'
+              }
+            </div>
+          </div>
+          `
+          );
+
+          // add time courses
+          totalMinutes += Number(session.time.slice(0, 2));
+          totalSeconds += Number(session.time.slice(3));
+          if (totalSeconds >= 60) {
+            totalSeconds -= 60;
+            ++totalMinutes;
+          } else if (totalMinutes >= 60) {
+            totalMinutes -= 60;
+            ++totalHours;
+          }
+          return `${totalHours}:${totalMinutes}:${totalSeconds}`;
+        });
+      } else {
+        // add session
+        sessionWrapper.insertAdjacentHTML(
+          "beforeend",
+          `
+          <div id="collapseOne" class="accordion-collapse collapse show session-wrapper" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body introduction__accordion-body">
+            <div class="introduction__accordion-right">
+              <span class="introduction__accordion-count">--</span>
+              <i class="fab fa-youtube introduction__accordion-icon"></i>
+              <a href="#" class="introduction__accordion-link">
+                هنوز جلسه ای آپلود نشده
+              </a>
+            </div>
+            <div class="introduction__accordion-left">
+              <span class="introduction__accordion-time">
+                00:00
+              </span>
+            </div>
+          </div>
+          `
+        );
+
+        // add time courses
+        totalMinutes = 0;
+        totalSeconds = 0;
+        totalHours = 0;
+      }
+
+      courseTimeElem.innerHTML = `${totalHours}:${totalMinutes}:${totalSeconds}`;
+      courseCommentCountElem.innerHTML = `${course.comments.length} دیدگاه`;
+      courseStudentsCountElem.innerHTML = course.courseStudentsCount;
     });
   return getUrlParam("name");
+};
+
+const getAndShowRelatedCourses = async () => {
+  const courseRelatedCoursesWrapper = document.querySelector(
+    ".course-info__courses-list"
+  );
+  const courseShortName = getUrlParam("name");
+  const res = await fetch(
+    `http://localhost:4000/v1/courses/related/${courseShortName}`
+  );
+  const relatedCourses = await res.json();
+  if (relatedCourses.length) {
+    relatedCourses.forEach((course) => {
+      courseRelatedCoursesWrapper.insertAdjacentHTML(
+        "beforeend",
+        `
+      <li class="course-info__courses-list-item">
+      <a href="course.html?name=${course.shortName}" class="course-info__courses-link">
+        <img src="http://localhost:4000/courses/covers/${course.cover}" alt="Course Cover" class="course-info__courses-img" />
+        <span class="course-info__courses-text">
+        ${course.name}
+        </span>
+      </a>
+    </li>
+      `
+      );
+    });
+  }
+  return relatedCourses;
 };
 
 export {
@@ -552,4 +662,5 @@ export {
   inertCourseBoxHtmlTemplate,
   coursesSorting,
   getCourseDetails,
+  getAndShowRelatedCourses,
 };
