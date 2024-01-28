@@ -548,7 +548,7 @@ const getCourseDetails = async () => {
               <i class="fab fa-youtube introduction__accordion-icon"></i>
               ${
                 session.free || course.isUserRegisteredToThisCourse
-                  ? `              <a href="#" class="introduction__accordion-link">
+                  ? `<a href="episode.html?name=${course.shortName}&id=${session._id}" class="introduction__accordion-link">
                   ${session.title}
                   </a>`
                   : `
@@ -557,7 +557,6 @@ const getCourseDetails = async () => {
                   </span>
                   `
               }
-
             </div>
             <div class="introduction__accordion-left">
               <span class="introduction__accordion-time">
@@ -650,6 +649,59 @@ const getAndShowRelatedCourses = async () => {
   return relatedCourses;
 };
 
+const getSessionDetails = async () => {
+  const courseShortName = getUrlParam("name");
+  const sessionId = getUrlParam("id");
+  const sessionVideoElem = document.querySelector(".episode-content__video");
+  const courseSessionListElem = document.querySelector(".sidebar-topics__list");
+
+  const res = await fetch(
+    `http://localhost:4000/v1/courses/${courseShortName}/${sessionId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+  const responseData = await res.json();
+
+  sessionVideoElem.setAttribute(
+    "src",
+    `http://localhost:4000/v1/courses/${responseData.session.video}`
+  );
+
+  responseData.sessions.forEach((session) => {
+    courseSessionListElem.insertAdjacentHTML(
+      "beforeend",
+      `
+      <li class="sidebar-topics__list-item">
+       <div class="sidebar-topics__list-right">
+         <i
+           class="sidebar-topics__list-item-icon fa fa-play-circle"
+         ></i>
+         ${
+           session.free
+             ? ` <a class="sidebar-topics__list-item-link" href="episode.html?name=${courseShortName}&id=${session._id}">${session.title}</a>`
+             : `<span class="sidebar-topics__list-item-link">${session.title}</span>`
+         }
+        </div>
+        <div class="sidebar-topics__list-left">
+          <span class="sidebar-topics__list-item-time">${session.time}</span>
+         ${
+           session.free
+             ? '<i class="fa fa-unlock"></i>'
+             : '<i class="fa fa-lock"></i>'
+         }
+       </div>
+    </li>
+
+      `
+    );
+  });
+
+  return responseData;
+};
+
 export {
   showUserNameInNavbar,
   renderTopBarMenus,
@@ -663,4 +715,5 @@ export {
   coursesSorting,
   getCourseDetails,
   getAndShowRelatedCourses,
+  getSessionDetails,
 };
