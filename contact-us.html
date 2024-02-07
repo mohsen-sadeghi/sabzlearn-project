@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="vendor/BootStrap/bootstrap.min.css" />
     <link rel="stylesheet" href="vendor/SwiperSlider/swiper.css" />
     <link rel="stylesheet" href="vendor/FontAwesome5/all.min.css" />
+
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/contact-us.css" />
 </head>
@@ -175,21 +176,21 @@
             <span class="login__subtitle">نظر یا انتقادتو بنویس برامون :)</span>
             <form action="#" class="login-form">
                 <div class="login-form__username login-form__parent">
-                    <input class="login-form__username-input" type="text" placeholder="نام و نام خانوادگی">
+                    <input class="login-form__username-input" id="name" type="text" placeholder="نام و نام خانوادگی">
                     <i class="login-form__username-icon fa fa-user"></i>
                 </div>
                 <div class="login-form__password login-form__parent">
-                    <input class="login-form__password-input" type="text" placeholder="آدرس ایمیل">
+                    <input class="login-form__password-input" id="email" type="text" placeholder="آدرس ایمیل">
                     <i class="login-form__password-icon fa fa-envelope"></i>
                 </div>
                 <div class="login-form__phone-number login-form__parent">
-                    <input class="login-form__password-input" type="text" placeholder="شماره تماس">
+                    <input class="login-form__password-input" id="phone" type="text" placeholder="شماره تماس">
                     <i class="login-form__password-icon fa fa-phone"></i>
                 </div>
                 <div class="login-form__text login-form__parent">
-                    <textarea class="login-form__text-input" placeholder="متن خود را وارد کنید"></textarea>
+                    <textarea class="login-form__text-input" id="body" placeholder="متن خود را وارد کنید"></textarea>
                 </div>
-                <button class="login-form__btn" type="submit">
+                <button class="login-form__btn" type="submit" id="submit-btn">
                     <span class="login-form__btn-text">ارسال</span>
                 </button>
             </form>
@@ -296,5 +297,7 @@
     <!--------------------------------  Footer-Section  -------------------------------->
 
     <script src="vendor/FontAwesome5/all.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="./js/contact-us.js" type="module"></script>
 </body>
 </html>
