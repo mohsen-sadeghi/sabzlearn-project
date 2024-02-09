@@ -1,4 +1,4 @@
-import {showSwal,saveInToLocalStorage,getToken} from './utils.js'
+import { showSwal, saveInToLocalStorage, getToken } from "./utils.js";
 
 const register = () => {
   const nameInput = document.querySelector("#name");
@@ -17,75 +17,95 @@ const register = () => {
   };
 
   fetch(`http://localhost:4000/v1/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUserInfos),
-    })
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newUserInfos),
+  })
     .then((res) => {
       if (res.status === 201) {
-        showSwal("ثبت نام با موفقیت انجام شد", "success", 'ورود به پنل', (result) => {
-          location.href = 'index.html'
-        })
+        showSwal(
+          "ثبت نام با موفقیت انجام شد",
+          "success",
+          "ورود به پنل",
+          (result) => {
+            location.href = "index.html";
+          }
+        );
       } else if (res.status === 409) {
-        showSwal("نام کاربری یا ایمیل قبلا استفاده شده", "error", 'تصحیح اطلاعات', () => {})
+        showSwal(
+          "نام کاربری یا ایمیل قبلا استفاده شده",
+          "error",
+          "تصحیح اطلاعات",
+          () => {}
+        );
       }
-      return res.json()
+      return res.json();
     })
     .then((result) => {
-      saveInToLocalStorage('user', {
-        token: result.accessToken
-      })
+      saveInToLocalStorage("user", {
+        token: result.accessToken,
+      });
     });
 };
 
 const login = () => {
-  const identifierInput = document.querySelector('#identifier')
-  const passwordInput = document.querySelector('#password')
+  const identifierInput = document.querySelector("#identifier");
+  const passwordInput = document.querySelector("#password");
 
   const userInfos = {
     identifier: identifierInput.value.trim(),
-    password: passwordInput.value.trim()
-  }
+    password: passwordInput.value.trim(),
+  };
 
   fetch(`http://localhost:4000/v1/auth/login`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userInfos)
-    })
-    .then(res => {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userInfos),
+  })
+    .then((res) => {
       if (res.status === 401) {
-        showSwal("کاربری با این اطلاعات یافت نشد ", "error", 'ثبت نام', () => {})
+        showSwal(
+          "کاربری با این اطلاعات یافت نشد ",
+          "error",
+          "ثبت نام",
+          () => {}
+        );
       } else if (res.status === 200) {
-        showSwal("ثبت نام با موفقیت انجام شد", "success", 'ورود به پنل', (result) => {
-          location.href = 'index.html'
-        })
+        showSwal(
+          "ثبت نام با موفقیت انجام شد",
+          "success",
+          "ورود به پنل",
+          (result) => {
+            location.href = "index.html";
+          }
+        );
       }
-      return res.json()
+      return res.json();
     })
-    .then(result => {
-      saveInToLocalStorage('user', {
-        token: result.accessToken
-      })
-    })
-}
+    .then((result) => {
+      saveInToLocalStorage("user", {
+        token: result.accessToken,
+      });
+    });
+};
 
 const getMe = async () => {
-  const token = getToken()
+  const token = getToken();
   if (!token) {
-    return false
+    return false;
   }
 
-  const res = await fetch('http://localhost:4000/v1/auth/me', {
+  const res = await fetch("http://localhost:4000/v1/auth/me", {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  const data = await res.json()
-  return data
-}
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await res.json();
+  return data;
+};
 
-export {register,login,getMe};
+export { register, login, getMe };

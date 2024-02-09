@@ -515,7 +515,7 @@ const getCourseDetails = async () => {
   })
     .then((res) => res.json())
     .then((course) => {
-      console.log(course);
+      console.log(course.comments);
       courseInfoTitleElem.innerHTML = course.name;
       courseDescElem.innerHTML = course.description;
       courseCategoryElem.innerHTML = course.categoryID.title;
@@ -534,7 +534,6 @@ const getCourseDetails = async () => {
 
       // show course session and show time courses
       let sessionWrapper = $.querySelector(".session-wrapper");
-
       if (course.sessions.length) {
         course.sessions.forEach((session, index) => {
           // add session
@@ -606,16 +605,87 @@ const getCourseDetails = async () => {
           </div>
           `
         );
-
         // add time courses
         totalMinutes = 0;
         totalSeconds = 0;
         totalHours = 0;
       }
-
       courseTimeElem.innerHTML = `${totalHours}:${totalMinutes}:${totalSeconds}`;
       courseCommentCountElem.innerHTML = `${course.comments.length} دیدگاه`;
       courseStudentsCountElem.innerHTML = course.courseStudentsCount;
+
+      // show courses comment
+      let commentsContentsWrapper = $.querySelector(".comments__content");
+      if(course.comments.length){
+        course.comments.forEach((comment) => {
+          commentsContentsWrapper.insertAdjacentHTML(
+            "beforeend",
+            `
+          <div class="comments__item">
+          <div class="comments__question">
+              <div class="comments__question-header">
+                  <div class="comments__question-header-right">
+                      <span class="comments__question-name comment-name">${
+                        comment.creator.name
+                      }</span>
+                      <span class="comments__question-status comment-status">(${
+                        comment.creator.role == "USER"
+                          ? `دانشجو`
+                          : `مدرس`
+                      })</span>
+                      <span class="comments__question-date comment-date">${comment.creator.createdAt.slice(
+                        0,
+                        10
+                      )}</span>
+                  </div>
+                  <div class="comments__question-header-left">
+                      <a class="comments__question-header-link comment-link" href="#">پاسخ</a>
+                  </div>
+              </div>
+              <div class="comments__question-text">
+                  <p class="comments__question-paragraph comment-paragraph">${
+                    comment.body
+                  }</p>
+              </div>
+          </div>
+          ${
+            comment.answer
+              ? `<div class="comments__ansewr">
+          <div class="comments__ansewr-header">
+              <div class="comments__ansewr-header-right">
+                  <span class="comments__ansewr-name comment-name">${
+                    comment.answerContent.creator.name
+                  }</span>
+                  <span class="comments__ansewr-staus comment-status">( ${comment.answerContent.creator.role == 'ADMIN' ? 'مدرس' : 'دانشجو'} )</span>
+                  <span class="comments__ansewr-date comment-date">${comment.answerContent.createdAt.slice(
+                    0,
+                    10
+                  )}</span>
+              </div>
+              <div class="comments__ansewr-header-left">
+                  <a class="comments__ansewr-header-link comment-link" href="#">پاسخ</a>
+              </div>
+          </div>
+          <div class="comments__ansewr-text">
+              <p class="comments__ansewr-paragraph comment-paragraph">${
+                comment.answerContent.body
+              }</p>
+          </div>
+      </div>`
+              : comment
+          }
+  
+      </div>
+          `
+          );
+        });
+      }else{
+        commentsContentsWrapper.insertAdjacentHTML(
+          "beforeend",
+         `<div class="alert alert-danger">هنوز هیچ کامنتی برای این دوره ثبت نشده</div>`
+        );
+      }
+
     });
   return getUrlParam("name");
 };
