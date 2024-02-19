@@ -496,9 +496,16 @@
                 <div class="comments__respond">
                     <div class="comments__score">
                         <span class="comments__score-title">امتیاز شما</span>
-                        <div class="comments__score-input">
-                            <span class="comments__score-input-text">امتیاز خود را انتخاب کنید</span>
-                            <i class="fas fa-angle-down	 comments__input-icon"></i>
+                        <div class="col-12">
+                          <select id="comments-score">
+                            <option value="5">به دوره امتیاز دهید</option>
+                            <option value="5">عالی</option>
+                            <option value="4">خیلی خوب</option>
+                            <option value="3">خوب</option>
+                            <option value="2">قابل قبول</option>
+                            <option value="1">ضعیف</option>
+
+                          </select>
                         </div>
                     </div>
                     <div class="comments__respond-content">
@@ -692,6 +699,7 @@
     
     <script src="vendor/FontAwesome5/all.min.js"></script>
     <script src="vendor/Bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="js/shared.js" type="module"></script>
     <script src="./js/course.js" type="module"></script>
 </body>

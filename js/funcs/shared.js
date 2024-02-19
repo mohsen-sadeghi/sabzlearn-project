@@ -616,6 +616,7 @@ const getCourseDetails = async () => {
 
       // show courses comment
       let commentsContentsWrapper = $.querySelector(".comments__content");
+      console.log(course.comments);
       if (course.comments.length) {
         course.comments.forEach((comment) => {
           commentsContentsWrapper.insertAdjacentHTML(
@@ -647,8 +648,7 @@ const getCourseDetails = async () => {
               </div>
           </div>
           ${
-            comment.answer
-              ? `<div class="comments__ansewr">
+            comment.answerContent ? `<div class="comments__ansewr">
           <div class="comments__ansewr-header">
               <div class="comments__ansewr-header-right">
                   <span class="comments__ansewr-name comment-name">${
@@ -674,7 +674,7 @@ const getCourseDetails = async () => {
               }</p>
           </div>
       </div>`
-              : comment
+              : ''
           }
   
       </div>
@@ -914,6 +914,42 @@ const showSearchCourses = async (userSearch) => {
   }
 };
 
+const submitComments = async () =>{
+  const commentInputElem = document.querySelector('.comments__score-input-respond')
+  const commentsScoreElem = document.querySelector("#comments-score");
+  let courseShortName = getUrlParam('name')
+  let score = 5
+  
+  commentsScoreElem.addEventListener("change", (event) => {
+    score = event.target.value;
+  });
+
+  const newCommentsInfos = {
+    body: commentInputElem.value.trim(),
+    courseShortName,
+    score,
+  }
+
+  const res = await fetch(`http://localhost:4000/v1/comments` , {
+    method: "POST",
+    headers: {
+      "Authorization" : `Bearer ${getToken()}`,
+      "Content-Type" : "application/json"
+    },
+    body : JSON.stringify(newCommentsInfos)
+  })
+  const result = await res.json()
+  if(res.ok){
+    showSwal(
+      "نظر شما با موفقیت ثبت شد",
+      "success",
+      "خیلی هم عالی",
+      (result) => {}
+    );
+  }else{
+  }
+}
+
 export {
   showUserNameInNavbar,
   renderTopBarMenus,
@@ -931,4 +967,5 @@ export {
   submitContactUsMassage,
   checkUserInput,
   showSearchCourses,
+  submitComments
 };
