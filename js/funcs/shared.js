@@ -616,7 +616,7 @@ const getCourseDetails = async () => {
 
       // show courses comment
       let commentsContentsWrapper = $.querySelector(".comments__content");
-      if(course.comments.length){
+      if (course.comments.length) {
         course.comments.forEach((comment) => {
           commentsContentsWrapper.insertAdjacentHTML(
             "beforeend",
@@ -629,9 +629,7 @@ const getCourseDetails = async () => {
                         comment.creator.name
                       }</span>
                       <span class="comments__question-status comment-status">(${
-                        comment.creator.role == "USER"
-                          ? `دانشجو`
-                          : `مدرس`
+                        comment.creator.role == "USER" ? `دانشجو` : `مدرس`
                       })</span>
                       <span class="comments__question-date comment-date">${comment.creator.createdAt.slice(
                         0,
@@ -656,7 +654,11 @@ const getCourseDetails = async () => {
                   <span class="comments__ansewr-name comment-name">${
                     comment.answerContent.creator.name
                   }</span>
-                  <span class="comments__ansewr-staus comment-status">( ${comment.answerContent.creator.role == 'ADMIN' ? 'مدرس' : 'دانشجو'} )</span>
+                  <span class="comments__ansewr-staus comment-status">( ${
+                    comment.answerContent.creator.role == "ADMIN"
+                      ? "مدرس"
+                      : "دانشجو"
+                  } )</span>
                   <span class="comments__ansewr-date comment-date">${comment.answerContent.createdAt.slice(
                     0,
                     10
@@ -679,13 +681,12 @@ const getCourseDetails = async () => {
           `
           );
         });
-      }else{
+      } else {
         commentsContentsWrapper.insertAdjacentHTML(
           "beforeend",
-         `<div class="alert alert-danger">هنوز هیچ کامنتی برای این دوره ثبت نشده</div>`
+          `<div class="alert alert-danger">هنوز هیچ کامنتی برای این دوره ثبت نشده</div>`
         );
       }
-
     });
   return getUrlParam("name");
 };
@@ -810,6 +811,109 @@ const submitContactUsMassage = async () => {
   }
 };
 
+const checkUserInput = (inputText) => {
+  if (inputText) {
+    location.href = `search.html?searchName=${inputText}`;
+  } else {
+    showSwal(
+      "اطلاعات به درستی وارد نشده است",
+      "error",
+      "تلاش دوباره",
+      () => {}
+    );
+  }
+};
+
+const showSearchCourses = async (userSearch) => {
+  const coursesSearchResultWrapper = document.querySelector("#courses-container");
+  const articleSearchResultWrapper = document.querySelector("#articles-wrapper");
+  const res = await fetch(`http://localhost:4000/v1/search/${userSearch}`);
+  const searchCourses = await res.json();
+  if(searchCourses.allResultCourses.length){
+    searchCourses.allResultCourses.forEach((courses) => {
+      coursesSearchResultWrapper.insertAdjacentHTML(
+        "beforeend",
+        `
+    <div class="col-4">
+    <div class="course-box">
+      <a href=course.html?name=${courses.shortName}>
+        <img src=http://localhost:4000/courses/covers/${
+          courses.cover
+        } alt="Course img" class="course-box__img" />
+      </a>
+      <div class="course-box__main">
+        <a href="#" class="course-box__title">${courses.name}</a>
+  
+        <div class="course-box__rating-teacher">
+          <div class="course-box__teacher">
+            <i class="fas fa-chalkboard-teacher course-box__teacher-icon"></i>
+            <a href="#" class="course-box__teacher-link">محمد امین سعیدی راد</a>
+          </div>
+          <div class="course-box__rating">
+          <img src="images/svgs/star.svg" alt="rating" class="course-box__star">
+          <img src="images/svgs/star.svg" alt="rating" class="course-box__star">
+          <img src="images/svgs/star.svg" alt="rating" class="course-box__star">
+          <img src="images/svgs/star.svg" alt="rating" class="course-box__star">
+          <img src="images/svgs/star.svg" alt="rating" class="course-box__star">
+          </div>
+        </div>
+  
+        <div class="course-box__status">
+          <div class="course-box__users">
+            <i class="fas fa-users course-box__users-icon"></i>
+            <span class="course-box__users-text">10</span>
+          </div>
+          <span class="course-box__price">${
+            courses.price === 0 ? "رایگان" : courses.price.toLocaleString()
+          }</span>
+        </div>
+      </div>
+  
+      <div class="course-box__footer">
+        <a href="#" class="course-box__footer-link">
+          مشاهده اطلاعات
+          <i class="fas fa-arrow-left course-box__footer-icon"></i>
+        </a>
+      </div>
+  
+    </div>
+  </div>`
+      );
+    });
+  }else{
+    coursesSearchResultWrapper.insertAdjacentHTML('beforeend' , `<div class="alert alert-danger">برای جست و جوی شما هیچ دوره ای یافت نشد</div>`)
+  }
+  if(searchCourses.allResultArticles.length){
+    searchCourses.allResultArticles.forEach((article) => {
+      articleSearchResultWrapper.insertAdjacentHTML(
+        "beforeend",
+        `    
+      <div class="col-4">
+      <div class="article-card">
+        <div class="article-card__header">
+          <a href="#" class="article-card__link-img">
+            <img src=http://localhost:4000/courses/covers/${article.cover} class="article-card__img" alt="Article Cover" />
+          </a>
+        </div>
+        <div class="article-card__content">
+          <a href="#" class="article-card__link">
+            ${article.title}
+          </a>
+          <p class="article-card__text">
+            ${article.description}
+          </p>
+          <a href="#" class="article-card__btn">بیشتر بخوانید</a>
+        </div>
+      </div>
+    </div>
+    `
+      );
+    });
+  }else{
+    articleSearchResultWrapper.insertAdjacentHTML('beforeend' , `<div class="alert alert-danger">برای جست و جوی شما هیچ مقاله ای یافت نشد</div>`)
+  }
+};
+
 export {
   showUserNameInNavbar,
   renderTopBarMenus,
@@ -825,4 +929,6 @@ export {
   getAndShowRelatedCourses,
   getSessionDetails,
   submitContactUsMassage,
+  checkUserInput,
+  showSearchCourses,
 };

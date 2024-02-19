@@ -1,10 +1,11 @@
-import {getAndShowAllCourses , getAndShowAllPopularCourses , getAndShowPresellCourses , getAndShowArticles , getAndShowMenus} from './funcs/shared.js'
+import {getAndShowAllCourses , getAndShowAllPopularCourses , getAndShowPresellCourses , getAndShowArticles , getAndShowMenus , checkUserInput} from './funcs/shared.js'
 const $ = document;
 const landingTitle = $.querySelector(".landing__title");
 const landingCoursesCount = $.querySelector("#courses-count");
 const landingMinutesCount = $.querySelector("#minutes-counter");
 const landingUsersCount = $.querySelector("#users-counter");
-
+const searchInputElem = $.querySelector('#search-input')
+const searchSubmitBtn = $.querySelector('#search-icon')
 window.addEventListener("load", () => {
   let landingText = "ما به هر قیمتی دوره آموزشی تولید نمی کنیم !";
   let typeIndex = 0;
@@ -19,6 +20,11 @@ window.addEventListener("load", () => {
   getAndShowPresellCourses()
   getAndShowArticles()
   // getAndShowMenus()
+  searchSubmitBtn.addEventListener('click' , event =>{
+    event.preventDefault()
+    checkUserInput(searchInputElem.value)
+  })
+
 });
 
 function typeWriter(text, index) {
