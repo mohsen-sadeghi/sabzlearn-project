@@ -1,5 +1,5 @@
 import { getAndShowCategoryCourses , inertCourseBoxHtmlTemplate , coursesSorting} from "./funcs/shared.js"
-import { searchInArray } from "./funcs/utils.js"
+import { searchInArray , paginateItems} from "./funcs/utils.js"
 window.addEventListener('load' , ()=>{
     getAndShowCategoryCourses().then(categoryCourses => {
         let containerCategory = document.querySelector('.container-category-courses')
@@ -61,5 +61,8 @@ window.addEventListener('load' , ()=>{
             containerCategory.insertAdjacentHTML('beforeend' , `<div class="alert alert-danger"> هیچ دوره ای برای جست و جو شما وجود ندارد :( </div>`)
           }
         })
+        // handel paginate
+        const coursePaginateWrapper = document.querySelector('.courses__pagination-list')
+        console.log(paginateItems(courses , 3 , coursePaginateWrapper , 2));
     })
 })
