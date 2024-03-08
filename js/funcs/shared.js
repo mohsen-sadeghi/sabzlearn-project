@@ -1,5 +1,5 @@
 import { getMe } from "./auth.js";
-import { isLogin, getUrlParam, getToken, showSwal } from "./utils.js";
+import { isLogin, getUrlParam, getToken, showSwal , paginateItems} from "./utils.js";
 
 const showUserNameInNavbar = () => {
   const navbarProfileBox = document.querySelector(".main-header__profile");
@@ -270,7 +270,7 @@ const getAndShowMenus = async () => {
       "beforeend",
       `
      <li class="main-header__item">
-     <a href=category.html?cat=${menu.href} class="main-header__link">${
+     <a href=category.html?cat=${menu.href}&paginate=1 class="main-header__link">${
         menu.title
       }
     ${
@@ -307,7 +307,7 @@ const getAndShowCategoryCourses = async () => {
   return categoryCourses;
 };
 
-const inertCourseBoxHtmlTemplate = (courses, showType, parentElement) => {
+const inertCourseBoxHtmlTemplate = (courses, showType = 'row', parentElement) => {
   parentElement.innerHTML = "";
   if (showType === "row") {
     courses.forEach((courses) => {
@@ -950,6 +950,12 @@ const submitComments = async () =>{
   }
 }
 
+const addAllCoursesToDom = async () =>{
+  const res = await fetch(`http://localhost:4000/v1/courses`)
+  const allCourses = await res.json()
+  return allCourses
+}
+
 export {
   showUserNameInNavbar,
   renderTopBarMenus,
@@ -967,5 +973,6 @@ export {
   submitContactUsMassage,
   checkUserInput,
   showSearchCourses,
-  submitComments
+  submitComments,
+  addAllCoursesToDom
 };

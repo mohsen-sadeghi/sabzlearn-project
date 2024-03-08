@@ -34,7 +34,7 @@ const searchInArray = (array , searchProperty , searchValue)=>{
      return outPutArray 
 }
 
-const paginateItems = (array , itemsPerPages , paginateParentElement, currentPage) => {
+const paginateItems = (array , itemsPerPages , paginateParentElement, currentPage , link) => {
   paginateParentElement.innerHtml = ''
   let endIndex = itemsPerPages * currentPage
   let startIndex = endIndex - itemsPerPages
@@ -43,10 +43,11 @@ const paginateItems = (array , itemsPerPages , paginateParentElement, currentPag
   for(let i = 1 ; i < paginatedCount ; i++){
     paginateParentElement.insertAdjacentHTML('beforeend' , `
     <li class="courses__pagination-item">
-              <a href="#" class="courses__pagination-link courses__pagination-link--active">
+              <a href=${link}?cat=${getUrlParam('cat')}&paginate=${i} class="${currentPage == i ? "courses__pagination-link courses__pagination-link--active":"courses__pagination-link"}">
                 ${i}
               </a>
-            </li>`)
+            </li>    
+            `)
   }
   return paginateItem
 }

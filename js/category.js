@@ -1,5 +1,5 @@
 import { getAndShowCategoryCourses , inertCourseBoxHtmlTemplate , coursesSorting} from "./funcs/shared.js"
-import { searchInArray , paginateItems} from "./funcs/utils.js"
+import { searchInArray , paginateItems , getUrlParam} from "./funcs/utils.js"
 window.addEventListener('load' , ()=>{
     getAndShowCategoryCourses().then(categoryCourses => {
         let containerCategory = document.querySelector('.container-category-courses')
@@ -63,6 +63,7 @@ window.addEventListener('load' , ()=>{
         })
         // handel paginate
         const coursePaginateWrapper = document.querySelector('.courses__pagination-list')
-        console.log(paginateItems(courses , 3 , coursePaginateWrapper , 2));
+        const shownCourses = paginateItems(courses , 3 , coursePaginateWrapper , getUrlParam('paginate') , 'category.html')
+        inertCourseBoxHtmlTemplate(shownCourses , coursesShowType , containerCategory)
     })
 })

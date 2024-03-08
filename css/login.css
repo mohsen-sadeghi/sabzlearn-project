@@ -171,10 +171,13 @@
     transform: rotate(-4deg);
 }
 
-/* Library custom style */
 
-.swal-overlay{
+
+/* Library Custom Styles */
+
+.swal-button-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center ;
 }
+
+/* Library Custom Styles */
