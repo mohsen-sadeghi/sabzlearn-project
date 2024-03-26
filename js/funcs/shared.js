@@ -53,7 +53,7 @@ const getAndShowAllCourses = async () => {
             <i class="fas fa-chalkboard-teacher course-box__teacher-icon"></i>
             <a href="#" class="course-box__teacher-link">${courses.creator}</a>
           </div>
-          <div class="course-box__rating">
+          <div class="course-box__rating">  
           ${Array(5 - courses.courseAverageScore)
             .fill(0)
             .map(

@@ -81,14 +81,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="mode">
-                                <ul class="mode-list">
-                                    <div class="mode-list-item mode-red"></div>
-                                    <div class="mode-list-item mode-blue"></div>
-                                    <div class="mode-list-item mode-dark"></div>
-                                    <div class="mode-list-item mode-light"></div>
-                                </ul>
-                            </div>
                         </div>
                         <div class="home-left">
                             <div class="home-profile">
@@ -98,7 +90,7 @@
                                     </a>
                                 </div>
                                 <div class="home-profile-name">
-                                    <a href="#">احسان خورمهر</a>
+                                    <a href="#" id="admin-name">احسان خورمهر</a>
                                 </div>
                                 <div class="home-profile-icon">
                                     <i class="fas fa-angle-down"></i>
@@ -118,37 +110,20 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            <input type="checkbox" class="checkbox-table form-check-input">
-                                        </th>
-                                        <th>شناسه</th>
-                                        <th>نام محصول</th>
-                                        <th>تعداد</th>
-                                        <th>وضعیت</th>
-                                        <th>قیمت</th>
+                                        <th>شماره</th>
+                                        <th>نام دوره</th>
+                                        <th>مبلغ</th>
+                                        <th>شرکت کننده ها</th>
+                                        <th>پشتیبانی</th>
+                                        <th>دسته بندی</th>
+                                        <th>امتیاز</th>
+                                        <th>وضعیت</th>  
                                         <th>ویرایش</th>
                                         <th>حذف</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" class="checkbox-table form-check-input">
-                                        </td>
-                                        <td id="id">323</td>
-                                        <td id="name">
-                                          <a href="file:///D:/Project/Admin_Panel/Product/index.html?id=${id}">لپ تاپ</a>
-                                        </td>
-                                        <td id="number">10</td>
-                                        <td id="condition">موجود</td>
-                                        <td id="price">100000</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary" id="edit-btn">ویرایش</button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger" id="delete-btn">حذف</button>
-                                        </td>
-                                    </tr>
+                                <tbody class="course-wrapper">
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -170,6 +145,8 @@
     <script src="vendor/swiperSlider/swiper.js"></script>
     <script src="js/custom.js"></script>
     <script src="js/script.js"></script>
+    <script src="../../js/panel/shared.js" type="module"></script>
+    <script src="../../js/panel/courses.js" type="module"></script>
 </body>
 
 </html>

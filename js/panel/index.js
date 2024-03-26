@@ -1,19 +1,23 @@
 import { getAdminInfos } from "./funcs/utils.js";
-import { insertNotificationsHtmlTemplate , seenNotification} from "./funcs/notifications.js";
+import { insertNotificationsHtmlTemplate,seenNotification} from "./funcs/notifications.js";
+
 window.seenNotification = seenNotification
-window.addEventListener("load", () => {
+
+window.addEventListener('load' , ()=>{
+  const adminWelcomeNameElem = document.querySelector("#admin-welcome-name");
   const adminNameTopBarElem = document.querySelector("#admin-name");
   const homeNotificationElem = document.querySelector(".home-notification");
   const homeNotificationBoxElem = document.querySelector(
     ".home-notification-modal"
   );
   getAdminInfos().then((admin) => {
-    console.log(admin);
+    console.log(admin); 
 
     // protect cms Routes
     if (admin.role === "ADMIN") {
       // show admin name 
       adminNameTopBarElem.innerHTML = admin.name;
+      adminWelcomeNameElem.innerHTML = admin.name;
     } else {
       location.replace("./../../login.html");
     }
@@ -28,5 +32,4 @@ window.addEventListener("load", () => {
     insertNotificationsHtmlTemplate(admin.notifications)
 
   });
-});
-
+})
