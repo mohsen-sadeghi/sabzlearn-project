@@ -8,7 +8,6 @@ window.addEventListener("load", () => {
     ".home-notification-modal"
   );
   getAdminInfos().then((admin) => {
-    console.log(admin);
 
     // protect cms Routes
     if (admin.role === "ADMIN") {
