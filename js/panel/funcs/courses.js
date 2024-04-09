@@ -1,7 +1,9 @@
 import { getToken } from "../../funcs/utils.js";
+import { showSwal } from "../../funcs/utils.js";
+
 let categoryId = -1;
 let status = "start";
-let courseCover = null
+let courseCover = null;
 
 const getAllCourses = async () => {
   const res = await fetch("http://localhost:4000/v1/courses");
@@ -61,7 +63,7 @@ const prepareCreateCorseFrom = async () => {
   const categoryListElem = document.querySelector(".category-list");
   const courseStatusPresellElem = document.querySelector("#presell");
   const courseStatusStartElem = document.querySelector("#start");
-  const courseCoverElem = document.querySelector('#course-cover')
+  const courseCoverElem = document.querySelector("#course-cover");
   const res = await fetch("http://localhost:4000/v1/category");
   const categoryCourses = await res.json();
   console.log(categoryCourses);
@@ -86,19 +88,35 @@ const prepareCreateCorseFrom = async () => {
     "change",
     (event) => (status = event.target.value)
   );
-  courseCoverElem.addEventListener('change' , event => courseCover = event.target.files[0])
+  courseCoverElem.addEventListener(
+    "change",
+    (event) => (courseCover = event.target.files[0])
+  );
 };
 
 const removeCourses = async (Id) => {
-  const res = await fetch(`http://localhost:4000/v1/courses/${Id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await res.json();
-  getAllCourses();
+  showSwal(
+    "آیا از حذف دوره اطمینان دارید ؟؟",
+    "warning",
+    ["نه", "آره"],
+    async () => {
+      const res = await fetch(`http://localhost:4000/v1/courses/${Id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        showSwal(
+          "دوره شما با موفقیت حذف شد",
+          "success",
+          "خیلی هم عالی ",
+          () => getAllCourses()
+        );
+      }
+    }
+  );
 };
 
 const createNewCourse = async () => {
@@ -113,19 +131,25 @@ const createNewCourse = async () => {
   formData.append("description", courseDescriptionElem.value.trim());
   formData.append("shortName", courseShortnameElem.value.trim());
   formData.append("support", courseSupportElem.value.trim());
-  formData.append('categoryID' , categoryId)
-  formData.append('status' , status)
-  formData.append('cover' , courseCover)
+  formData.append("categoryID", categoryId);
+  formData.append("status", status);
+  formData.append("cover", courseCover);
 
-  const res = await fetch(`http://localhost:4000/v1/courses` , {
+  const res = await fetch(`http://localhost:4000/v1/courses`, {
     method: "POST",
-    headers : {
-      Authorization : `Bearer ${getToken()}`
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
     },
-    body: formData
-  })
-  
-  console.log(res);
+    body: formData,
+  });
+
+  if (res.ok) {
+    showSwal("دوره شما با موفقیت اضافه شد", "success", "خیلی هم عالی ", () =>
+      getAllCourses()
+    );
+  } else {
+    showSwal("دوره اضافه نشد", "error", "ورود به صفحه اصلی", () => {});
+  }
 };
 
 export {

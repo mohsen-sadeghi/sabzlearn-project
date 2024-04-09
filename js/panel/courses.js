@@ -2,9 +2,13 @@ import {
   getAllCourses,
   removeCourses,
   createNewCourse,
-  prepareCreateCorseFrom
+  prepareCreateCorseFrom,
 } from "./funcs/courses.js";
+
+
 window.removeCourses = removeCourses;
+
+
 window.addEventListener("load", () => {
   const submitBtnElem = document.querySelector(".submit-btn");
   getAllCourses();
