@@ -5,7 +5,7 @@ const getAndShowAllMenus = async () => {
   const menusWrapper = document.querySelector("table tbody");
   const res = await fetch(`http://localhost:4000/v1/menus/all`);
   const getMenus = await res.json();
-  menusWrapper.innerHTML = ""
+  menusWrapper.innerHTML = "";
   console.log(getMenus);
   getMenus.forEach((menu, index) => {
     menusWrapper.insertAdjacentHTML(
@@ -77,16 +77,23 @@ const removeMenuAndSubmenu = async (id) => {
     "warning",
     ["نه", "آره"],
     async (result) => {
-      const res = await fetch(`http://localhost:4000/v1/menus/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      });
-      if (res.ok) {
-        showSwal("دوره شما با موفقیت حذف شد", "success", "خیلی هم عالی ", () =>
-          getAndShowAllMenus()
-        );
+      if (result) {
+        const res = await fetch(`http://localhost:4000/v1/menus/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        });
+        if (res.ok) {
+          showSwal(
+            "دوره شما با موفقیت حذف شد",
+            "success",
+            "خیلی هم عالی ",
+            () => getAndShowAllMenus()
+          );
+        }
+      } else {
+        getAndShowAllMenus()
       }
     }
   );
