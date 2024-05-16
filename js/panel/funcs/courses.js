@@ -48,9 +48,7 @@ const getAllCourses = async () => {
             <button type="button" class="btn btn-primary" id="edit-btn"  >ویرایش</button>
          </td>
          <td>
-            <button type="button" class="btn btn-danger" id="delete-btn" onclick='removeCourses(${JSON.stringify(
-              course._id
-            )})'>حذف</button>
+            <button type="button" class="btn btn-danger" id="delete-btn" onclick='removeCourses(${JSON.stringify( course._id )})'>حذف</button>
          </td>
         </tr>
         `
